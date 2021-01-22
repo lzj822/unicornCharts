@@ -44,7 +44,7 @@ export const Pie: React.FC<PieProps> = (props) => {
     return (
         <div>
             <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-                {calcHandler()}
+                {/* {calcHandler()} */}
                 <path d="M100 100 L100 50 A50 50 0 0 1 118.06 53.38" fill="blue" />
                 <path d="M100 100 L118.06 53.38 A50 50 0 0 1 113.12 136" fill="red" />
                {/*     <path d="M100 100 L100 150 A50 50 0 0 1 50 100" fill="yellow" />
