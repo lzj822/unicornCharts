@@ -6,7 +6,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Pie series={[10, 50, 80, 30]} chart={{}}></Pie>
+        <Pie series={[50, 50, 50, 70, 564]} chart={{}} radius={100}></Pie>
       </header>
     </div>
   );
