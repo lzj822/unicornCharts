@@ -1,6 +1,6 @@
 import React from 'react';
 import { FULL_ANGLE } from '../utils/constants';
-import { getPositionByAngle } from '../utils/helpers';
+import { getPositionByAngle, roundedToNDecimals } from '../utils/helpers';
 
 export interface PieProps {
     labels?: string[];
@@ -12,8 +12,8 @@ export interface PieProps {
 }
 
 interface chartProps {
-    width?: number;
-    height?: number;
+    width: number;
+    height: number;
     title?: string;
     type?: string;
     colors?: string[];
@@ -22,8 +22,10 @@ interface chartProps {
 export const Pie: React.FC<PieProps> = (props) => {
 
     const { series, chart, radius, clockWise = true, startAngle = 0 } = props;
-    const { colors = ['#00BBAD', '#FDC25B', '#FF5551', '#0F7EC1', '#9F3C74', '#324649']} = chart;
-    
+    const { colors = ['#00BBAD', '#FDC25B', '#FF5551', '#0F7EC1', '#9F3C74', '#324649'], width, height } = chart;
+
+    const center = { x: width / 2, y: height / 2 };
+
     const calcHandler = () => {
         const sum = series?.reduce((pre, cur) => cur > 0 ? Number(pre) + Number(cur) : pre, 0);
         const resultPath: any[] = [];
@@ -36,6 +38,10 @@ export const Pie: React.FC<PieProps> = (props) => {
 
         series?.reduce((pre, cur, index) => {
 
+            if (Number(cur) <= 0) {
+                return pre;
+            }
+
             const originDiffAngle = Number(cur) / Number(sum) * FULL_ANGLE;
 
             const startAngle = pre.curAngle;
@@ -44,12 +50,12 @@ export const Pie: React.FC<PieProps> = (props) => {
             const stratPosition = getPositionByAngle(startAngle, radius);
             const endPosistion = getPositionByAngle(endAngle, radius);
 
-            const [arcStartX, arcStartY] = [100 + stratPosition.x, 100 - stratPosition.y];
-            const [arcEndX, arcEndY] = [100 + endPosistion.x, 100 - endPosistion.y];
-            const largeArc = originDiffAngle > 180 ? 1: 0;
+            const [arcStartX, arcStartY] = [roundedToNDecimals(center.x + stratPosition.x, 4), roundedToNDecimals(center.y - stratPosition.y, 4)];
+            const [arcEndX, arcEndY] = [roundedToNDecimals(center.x + endPosistion.x, 4), roundedToNDecimals(center.y - endPosistion.y, 4)];
+            const largeArc = originDiffAngle > 180 ? 1 : 0;
 
             resultPath.push(
-                <path key={index} d={`M100 100 L${arcStartX} ${arcStartY} A${radius} ${radius} 0 ${largeArc} ${clockWise ? 1 : 0} ${arcEndX} ${arcEndY} z`} fill={colors[index]}/>
+                <path key={index} d={`M${center.x} ${center.y} L${arcStartX} ${arcStartY} A${radius} ${radius} 0 ${largeArc} ${clockWise ? 1 : 0} ${arcEndX} ${arcEndY} z`} fill={colors[index]}/>
             )
 
             return { curAngle: endAngle, stratPosition }
@@ -63,7 +69,7 @@ export const Pie: React.FC<PieProps> = (props) => {
 
     return (
         <div>
-            <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width={width} height={height}>
                 {calcHandler()}
             </svg>
         </div>
