@@ -65,12 +65,11 @@ export const Pie: React.FC<PieProps> = (props) => {
         return resultPath;
     }
 
-    // calcHandler();
-
     return (
         <div>
             <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width={width} height={height}>
                 {calcHandler()}
+                {/* <path d="M100 75 L100 50 A50 50 0 0 1 150 100 L125 100 A25 25 0 0 0 100 75" stroke="red" fill="none" /> */}   
             </svg>
         </div>
     )
