@@ -28,7 +28,7 @@ export const Pie: React.FC<PieProps> = (props) => {
 
     const calcHandler = () => {
         const sum = series?.reduce((pre, cur) => cur > 0 ? Number(pre) + Number(cur) : pre, 0);
-        const resultPath: any[] = [];
+        const resultPath: React.SVGProps<SVGPathElement>[] = [];
         
         if (sum === 0) {
             return resultPath;
@@ -48,17 +48,17 @@ export const Pie: React.FC<PieProps> = (props) => {
             const endAngle = clockWise ? startAngle + originDiffAngle : startAngle - originDiffAngle;
 
             const stratPosition = getPositionByAngle(startAngle, radius);
-            const endPosistion = getPositionByAngle(endAngle, radius);
+            const endPosition = getPositionByAngle(endAngle, radius);
 
             const [arcStartX, arcStartY] = [roundedToNDecimals(center.x + stratPosition.x, 4), roundedToNDecimals(center.y - stratPosition.y, 4)];
-            const [arcEndX, arcEndY] = [roundedToNDecimals(center.x + endPosistion.x, 4), roundedToNDecimals(center.y - endPosistion.y, 4)];
+            const [arcEndX, arcEndY] = [roundedToNDecimals(center.x + endPosition.x, 4), roundedToNDecimals(center.y - endPosition.y, 4)];
             const largeArc = originDiffAngle > 180 ? 1 : 0;
 
             resultPath.push(
                 <path key={index} d={`M${center.x} ${center.y} L${arcStartX} ${arcStartY} A${radius} ${radius} 0 ${largeArc} ${clockWise ? 1 : 0} ${arcEndX} ${arcEndY} z`} fill={colors[index]}/>
             )
 
-            return { curAngle: endAngle, stratPosition }
+            return { curAngle: endAngle }
 
         }, { curAngle })
 
